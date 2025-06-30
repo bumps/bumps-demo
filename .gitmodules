@@ -1,0 +1,4 @@
+[submodule "bumps"]
+	path = bumps
+	url = git@github.com:bumps/bumps.git
+	branch = client-socket-prop
