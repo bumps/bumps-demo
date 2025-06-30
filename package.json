@@ -1,0 +1,38 @@
+{
+  "name": "bumps-demo",
+  "version": "1.0.0",
+  "description": "pyodide-based web demo of bumps",
+  "main": "dist/index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node make_manifest.mjs && vite build --emptyOutDir -m development",
+    "build_prod": "vite build --emptyOutDir -m production",
+    "build_standalone": "vite build --emptyOutDir -m standalone",
+    "preview": "vite preview --port 4173"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bumps/bumps-demo.git"
+  },
+  "keywords": [
+    "montecarlo",
+    "mcmc",
+    "bumps",
+    "webassembly",
+    "pyodide"
+  ],
+  "author": "Brian B. Maranville",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bumps/bumps-demo/issues"
+  },
+  "homepage": "https://github.com/bumps/bumps-demo#readme",
+  "dependencies": {
+    "bumps-webview-client": "file:bumps/bumps/webview/client",
+    "comlink": "^4.4.1",
+    "pyodide": "^0.27.7",
+    "socket.io-client": "^4.8.1",
+    "vite": "^5.2.10"
+  }
+}
