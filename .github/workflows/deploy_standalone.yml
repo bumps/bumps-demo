@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
         python-version: ["3.12"]
 
     steps:
@@ -68,7 +68,7 @@ jobs:
         mkdir -p public/wheels
         cp $BUMPS_DIST/$BUMPS_WHEEL_FILE public/wheels/
         rm -rf dist
-        npm run build
+        npm run build -- --sourcemap
         echo "deploy_path=$(realpath dist)" >> $GITHUB_OUTPUT
       env:
          CI: ""

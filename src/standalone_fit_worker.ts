@@ -14,11 +14,14 @@ declare const MOLGROUPS_WHEEL_FILE: string;
 type APIResult = PyProxy | number | string | boolean | null | undefined;
 
 const pyodide_url = new URL(`https://cdn.jsdelivr.net/pyodide/v${version}/full/pyodide.mjs`);
+const pyodide_index_url = new URL(`https://cdn.jsdelivr.net/pyodide/v${version}/full/`);
 
 async function loadPyodideBase() {
     const pyodide_loader = await import(pyodide_url.href);
     const { loadPyodide } = pyodide_loader;
-    return await loadPyodide();
+    return await loadPyodide({
+        indexURL: pyodide_index_url.href,
+    });
     // return await loadPyodide({
         // indexURL: "https://cdn.jsdelivr.net/pyodide/dev/full/"
         // indexURL: `https://cdn.jsdelivr.net/pyodide/v${version}/full/`
