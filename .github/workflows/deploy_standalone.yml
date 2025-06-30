@@ -59,6 +59,10 @@ jobs:
         npm i
         npm link
       working-directory: bumps/bumps/webview/client
+    - name: npm initialize self
+      run: |
+        npm i
+        npm link bumps-webview-client
     - name: build client
       id: build_client
       run: |
