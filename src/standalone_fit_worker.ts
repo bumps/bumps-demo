@@ -56,8 +56,10 @@ async function createAPI(pyodide: PyodideInterface) {
     let api = await pyodide.runPythonAsync(`
     import dill
     from bumps.webview.server import api
+    from bumps.mapper import SerialMapper
     api.state.parallel = 0
     api.state.problem.serializer = "dataclass"
+    api.state.mapper = SerialMapper()
 
     # patch Thread to run in the main thread
     api.FitThread.start = api.FitThread.run
@@ -204,7 +206,7 @@ export class Server {
         const api = await this.initialized;
         const callback = (args[args.length - 1] instanceof Function) ? args.pop() : null;
         console.log(`onAsyncEmit: ${signal}`, {args, callback});
-        const result: PyProxy = await api[signal](args);
+        const result: PyProxy = await api.get(signal)(args);
         const jsResult = result?.toJs?.({dict_converter: Object.fromEntries, create_pyproxies: false}) ?? result;
         if (callback !== null) {
             await callback(jsResult);

@@ -99,13 +99,16 @@ async function createAPI(pyodide: PyodideInterface) {
     @dataclass
     class WorkerFitThread:
         fitclass: Any
-        abort_event: Any
+        fit_abort_event: Any
         problem: bumps.fitproblem.FitProblem
+        mapper: Any
         options: dict
         parallel: int
         convergence_update: int
         uncertainty_update: int
-        terminate_on_finish: bool
+        console_update: int
+        fit_state: Any # for resuming fits
+        convergence: Any # for resuming fits
 
         _alive = True
 
@@ -127,7 +130,7 @@ async function createAPI(pyodide: PyodideInterface) {
             dumped = dill.dumps(self.problem)
             await api.emit("set_fit_thread_autosave_session_interval", self.uncertainty_update)
             await api.emit("set_fit_thread_problem", dumped)
-            await api.emit("start_fit_thread_fit", self.fitclass.id, self.options, self.terminate_on_finish)
+            await api.emit("start_fit_thread_fit", self.fitclass.id, self.options, False) # no resume for now
             await api.emit("add_notification", {
                 "title": "Fit Started",
                 "content": f"Fit started with problem: {api.state.problem.fitProblem.name}",
@@ -303,7 +306,7 @@ export class Server {
         // this is for emit() calls from the client
         await this.initialized; // api ready after this...
         const callback = (args[args.length - 1] instanceof Function) ? args.pop() : null;
-        console.log(`onAsyncEmit: ${signal}`, {args, callback});
+        console.debug(`onAsyncEmit: ${signal}`, {args, callback});
         const api_function = this.api.get(signal);
         if (api_function === undefined) {
             throw new Error(`Signal ${signal} not found in API`);
@@ -311,7 +314,7 @@ export class Server {
         else if (typeof api_function !== 'function') {
             throw new Error(`Signal ${signal} is not a function in API`);
         }
-        console.log("api function:", api_function, "args:", args);
+        console.debug("api function:", api_function, "args:", args);
         const result = await api_function(args);
         // const result: PyProxy | undefined | number | string | null = await this.api[signal](args);
         const jsResult = result?.toJs?.({dict_converter: Object.fromEntries, create_pyproxies: false}) ?? result;
