@@ -106,9 +106,9 @@ async function createAPI(pyodide: PyodideInterface) {
         parallel: int
         convergence_update: int
         uncertainty_update: int
-        console_update: int
-        fit_state: Any # for resuming fits
-        convergence: Any # for resuming fits
+        console_update: int = 500 # seconds
+        fit_state: Any = None # for resuming fits
+        convergence: Any = None # for resuming fits
 
         _alive = True
 
