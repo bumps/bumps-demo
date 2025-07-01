@@ -1,7 +1,7 @@
 #!/bin/sh
 
 HERE=$(pwd)
-BUMPS_DIR=$HOME/dev/bumps
+BUMPS_DIR=$HERE/bumps
 TARGET=$HERE/public/wheels
 export BUILD_EXTENSION=True
 
